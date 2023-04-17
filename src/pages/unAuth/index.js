@@ -516,14 +516,11 @@ export const Landing = ({ isSignedIn, setShowAdmin }) => {
                 href="https://hr6bimbyqly.typeform.com/to/wVhraeUG"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-black bg-yellow-300 focus:outline-none hover:bg-yellow-400 focus:ring-4 focus:outline-none rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 fixed bottom-1 right-1"
+                className="text-black bg-yellow-300 focus:outline-none hover:bg-yellow-400 focus:ring-4 focus:outline-none rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 fixed bottom-1 right-1"
               >
                 Give us your feedback
               </a>
-
-              {/* <KycDao /> */}
             </div>
-            {/* <div ref={ref} id="bottom" /> */}
           </>
         </div>
       </main>

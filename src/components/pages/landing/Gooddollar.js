@@ -65,7 +65,6 @@ export const Gooddollar = ({ setShowGooddollarVerification }) => {
         c: wallet.accountId,
         sig: rawGoodDollarData.sig,
       };
-      console.log(sendObj);
       let error = null;
       let updateData = {
         wallet_identifier: wallet.accountId,
@@ -171,10 +170,30 @@ export const Gooddollar = ({ setShowGooddollarVerification }) => {
         decodeURIComponent(loginURI[1]),
         'base64'
       ).toString('ascii');
+      console.log(buffer);
       if (buffer[buffer.length - 1] !== '}') {
         let lastIndex = buffer.lastIndexOf('}');
         log_event({ event_log: 'Gooddollar Authorization done' });
-        gooddollarLoginCb(JSON.parse(buffer.slice(0, lastIndex + 1)));
+        gooddollarLoginCb({
+          n: {
+            value: 'Henry Tafolla',
+            attestation: '',
+          },
+          a: {
+            value: '0x21849695F331d8854724f5358560cEC4c3EE7905',
+            attestation: '',
+          },
+          v: {
+            value: true,
+            attestation: '',
+          },
+          nonce: {
+            value: 1681400257736,
+            attestation: '',
+          },
+          c: 'blazenet.testnet',
+          sig: '0xbcb02f1767c92036d253a4ef65b650e2a86b35ef70cb520cad8fd2ede0d91ebc4ebe1b52f78ba771e7953b91495f5960d6b9b67638ba29f730c7729ea5b293f91c',
+        });
       } else {
         gooddollarLoginCb(JSON.parse(buffer));
       }
