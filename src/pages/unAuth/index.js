@@ -11,6 +11,7 @@ import { supabase } from '../../utils/supabase';
 import { toast } from 'react-toastify';
 import { IAmHumanStatus } from '../../components/pages/landing/iAmHumanStatus';
 import { ApplyCommunityVerify } from '../../components/pages/landing/applyCommunityVerify';
+import { CommunitySbt } from '../../components/pages/landing/communitySbt';
 import { log_event } from '../../utils/utilityFunctions';
 import {
   app_contract,
@@ -510,6 +511,11 @@ export const Landing = ({ isSignedIn, setShowAdmin }) => {
                       isSbtToken={Boolean(tokenData)}
                       isFvToken={Boolean(fvTokenData)}
                     />
+                  </div>
+                </div>
+                <div className="lg:mx-auto lg:max-w-7xl lg:px-8">
+                  <div className="mx-auto max-w-xl px-6 lg:col-start-2 lg:mx-0 lg:max-w-none lg:pb-8 lg:px-0">
+                    <CommunitySbt />
                   </div>
                 </div>
               </div>
