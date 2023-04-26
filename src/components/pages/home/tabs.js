@@ -6,7 +6,7 @@ import { ManageTokens } from './manageTokens';
 import { CheckSbtTokenStatus } from './myOwnSbt';
 import { OgSBTApplicationsTable } from './OgSbtApplication';
 import { FVSBTApplicationsTable } from './fvApplications';
-
+import { Slots } from './Slots';
 export const Tabs = ({ isAdmin }) => {
   const [activeTab, setActiveTab] = React.useState('My own SBT');
 
@@ -72,6 +72,14 @@ export const Tabs = ({ isAdmin }) => {
           </div>
         ),
       },
+      {
+        name: 'Slots For Community Sbt',
+        icon: (
+          <div className="text-xl mr-[8.5px]">
+            <GiToken />
+          </div>
+        ),
+      },
     ],
     [activeTab]
   );
@@ -115,9 +123,9 @@ export const Tabs = ({ isAdmin }) => {
           {activeTab === 'Manage Council Members' && <ManageAdmin />}
           {activeTab === 'Manage SBT / Verified' && <ManageTokens />}
           {activeTab === 'My own SBT' && <CheckSbtTokenStatus />}
-
           {activeTab === 'OG SBT Applications' && <OgSBTApplicationsTable />}
           {activeTab === 'FV Applications' && <FVSBTApplicationsTable />}
+          {activeTab === 'Slots For Community Sbt' && <Slots />}
         </>
       ) : (
         <CheckSbtTokenStatus />
