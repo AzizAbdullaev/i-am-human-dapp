@@ -1,4 +1,5 @@
 import React from 'react';
+import { supabase } from '../../../utils/supabase';
 
 const people = [
   {
@@ -11,6 +12,13 @@ const people = [
 ];
 
 export default function SlotTable() {
+  const [slots, setSlots] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const fetchSlots = async () => {
+    setLoading(true);
+    const { data } = await supabase.select('slots');
+    setSlots(data);
+  };
   return (
     <div>
       <div className="mt-8 flow-root">
@@ -43,9 +51,9 @@ export default function SlotTable() {
                   >
                     Created At
                   </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -63,14 +71,14 @@ export default function SlotTable() {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {person.created_at}
                     </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <a
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Edit<span className="sr-only">, {person.name}</span>
                       </a>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
