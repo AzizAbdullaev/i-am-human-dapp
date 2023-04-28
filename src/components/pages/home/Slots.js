@@ -1,24 +1,25 @@
 import React from 'react';
 import { supabase } from '../../../utils/supabase';
-
-const people = [
-  {
-    slot_name: 'Lindsay Walton',
-    start_time: 'Front-end Developer',
-    end_time: 'lindsay.walton@example.com',
-    created_at: 'Member',
-  },
-  // More people...
-];
+import dayjs from 'dayjs';
+import { AddSlotPanel } from './Slots/AddSlotPanel';
 
 export default function SlotTable() {
   const [slots, setSlots] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const fetchSlots = async () => {
+  const fetchSlots = React.useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase.select('slots');
-    setSlots(data);
-  };
+    try {
+      const { data } = await supabase.select('slots');
+      setSlots(data ?? []);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchSlots();
+  }, [fetchSlots]);
+
   return (
     <div>
       <div className="mt-8 flow-root">
@@ -57,21 +58,43 @@ export default function SlotTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {people.map((person) => (
-                  <tr key={person.email}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {person.slot_name}
+                {loading ? (
+                  <tr className="animate-pulse pt-4">
+                    <td>
+                      <div class="h-6 mt-2 mx-2 bg-slate-300 rounded"></div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {person.start_time}
+                    <td>
+                      <div class="h-6 mt-2 mx-2 bg-slate-300 rounded"></div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {person.end_time}
+                    <td>
+                      <div class="h-6 mt-2 mx-2 bg-slate-300 rounded"></div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {person.created_at}
+                    <td>
+                      <div class="h-6 mt-2 mx-2 bg-slate-300 rounded"></div>
                     </td>
-                    {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                  </tr>
+                ) : slots.length === 0 ? (
+                  <tr>
+                    <td colSpan={4}>
+                      <p className="p-2 font-light">No Slots Found</p>
+                    </td>
+                  </tr>
+                ) : (
+                  slots.map((person) => (
+                    <tr key={person.email}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                        {person.slot_name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {dayjs(person.start_time).format('DD MMMM YYYY, HH:MM')}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {dayjs(person.end_time).format('DD MMMM YYYY, HH:MM')}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {dayjs(person.created_at).format('DD MMMM YYYY, HH:MM')}
+                      </td>
+                      {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <a
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"
@@ -79,8 +102,9 @@ export default function SlotTable() {
                         Edit<span className="sr-only">, {person.name}</span>
                       </a>
                     </td> */}
-                  </tr>
-                ))}
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -91,6 +115,7 @@ export default function SlotTable() {
 }
 
 export const Slots = () => {
+  const [isPanelOpen, setIsPanelOpen] = React.useState(false);
   return (
     <div>
       <div className="px-6 lg:px-8 mt-4">
@@ -102,6 +127,7 @@ export const Slots = () => {
               </h1>
               <button
                 type="button"
+                onClick={() => setIsPanelOpen(true)}
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
               >
                 Add Slot
@@ -116,6 +142,7 @@ export const Slots = () => {
             </div>
           </div>
         </div>
+        <AddSlotPanel open={isPanelOpen} setOpen={setIsPanelOpen} />
       </div>
     </div>
   );

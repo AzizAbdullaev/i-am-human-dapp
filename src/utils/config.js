@@ -7,7 +7,7 @@ export function getEnv(env = process.env.REACT_APP_ENV) {
         og_contract: 'og-sbt.i-am-human.near',
         gooddollar_contract: 'gooddollar-v1.i-am-human.near',
         new_sbt_contract: 'sbt1.i-am-human.testnet',
-        apiLink: 'https://api-ophc7vkxsq-uc.a.run.app',
+        apiLink: 'http://localhost:3001',
       };
     case 'dev':
       return {
