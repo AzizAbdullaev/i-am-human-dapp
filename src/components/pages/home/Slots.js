@@ -3,23 +3,7 @@ import { supabase } from '../../../utils/supabase';
 import dayjs from 'dayjs';
 import { AddSlotPanel } from './Slots/AddSlotPanel';
 
-export default function SlotTable() {
-  const [slots, setSlots] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const fetchSlots = React.useCallback(async () => {
-    setLoading(true);
-    try {
-      const { data } = await supabase.select('slots');
-      setSlots(data ?? []);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    fetchSlots();
-  }, [fetchSlots]);
-
+export default function SlotTable({ slots, loading }) {
   return (
     <div>
       <div className="mt-8 flow-root">
@@ -46,12 +30,12 @@ export default function SlotTable() {
                   >
                     End Time
                   </th>
-                  <th
+                  {/* <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
                     Created At
-                  </th>
+                  </th> */}
                   {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th> */}
@@ -91,9 +75,9 @@ export default function SlotTable() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {dayjs(person.end_time).format('DD MMMM YYYY, HH:MM')}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {dayjs(person.created_at).format('DD MMMM YYYY, HH:MM')}
-                      </td>
+                      </td> */}
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <a
                         href="#"
@@ -116,6 +100,22 @@ export default function SlotTable() {
 
 export const Slots = () => {
   const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+  const [slots, setSlots] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const fetchSlots = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data } = await supabase.select('slots');
+      setSlots(data ?? []);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchSlots();
+  }, [fetchSlots]);
+
   return (
     <div>
       <div className="px-6 lg:px-8 mt-4">
@@ -138,11 +138,15 @@ export const Slots = () => {
         <div className="mt-8 flow-root">
           <div className="-my-2 -mx-6 overflow-x-auto lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <SlotTable />
+              <SlotTable slots={slots} loading={loading} />
             </div>
           </div>
         </div>
-        <AddSlotPanel open={isPanelOpen} setOpen={setIsPanelOpen} />
+        <AddSlotPanel
+          open={isPanelOpen}
+          fetchSlots={fetchSlots}
+          setOpen={setIsPanelOpen}
+        />
       </div>
     </div>
   );

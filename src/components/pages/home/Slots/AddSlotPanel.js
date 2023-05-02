@@ -2,14 +2,25 @@ import { useState } from 'react';
 import { Panel } from '../../../common/panel';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { supabase } from '../../../../utils/supabase';
 
-export function AddSlotPanel({ open, setOpen }) {
+export function AddSlotPanel({ open, setOpen, fetchSlots }) {
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [slotName, setSlotName] = useState('');
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(startDate.getTime() + 4200000);
+    const { error } = await supabase.insert('slots', {
+      slot_name: slotName,
+      start_time: startDate,
+      end_time: new Date(startDate.getTime() + 4200000).toISOString(),
+    });
+    console.log(setOpen);
+    if (!error) {
+      setOpen(false);
+      fetchSlots();
+    }
   };
 
   return (
@@ -55,24 +66,6 @@ export function AddSlotPanel({ open, setOpen }) {
               className="border p-1 rounded bg-gray-100 mt-1 w-full"
               dateFormat="MMMM d, yyyy h:mm aa"
               onChange={(date) => setStartDate(date)}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="end-date"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              End Date
-              <span className="text-xs text-gray-400">
-                (imp* all times are in your local time zone)
-              </span>
-            </label>
-            <DatePicker
-              selected={endDate}
-              showTimeSelect
-              className="border p-1 rounded bg-gray-100 mt-1 w-full"
-              dateFormat="MMMM d, yyyy h:mm aa"
-              onChange={(date) => setEndDate(date)}
             />
           </div>
           <div className="">
